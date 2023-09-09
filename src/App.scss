@@ -1,0 +1,42 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  background-color: #282c34;
+}
+header {
+  height: 50vh;
+  display: grid;
+  place-content: center;
+  background-image: url("../public/images/background.jpg");
+  background-position: center top;
+}
+h1 {
+  color: #282c34;
+  text-shadow: 3px 3px 10px cadetblue;
+}
+input {
+  padding: 10px;
+  margin: 10px;
+  border-radius: 5px;
+  border: 0;
+  text-align: center;
+  width: 15vw;
+}
+
+
+
+@media screen and (max-width: 768px) {
+  input {
+    width: 50%;
+  }
+  .person {
+    text-align: center;
+    display: block;
+  }
+  header {
+    background-attachment: fixed;
+  }
+}

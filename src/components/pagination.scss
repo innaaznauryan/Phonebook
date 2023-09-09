@@ -1,0 +1,29 @@
+.pagination {
+    text-align: center;
+
+    .arrows {
+        color: cadetblue;
+        font-weight: 600;
+        padding: 20px;
+        display: inline-block;
+        position: relative;
+        svg {
+            color: cadetblue;
+            transition: .5s;
+            position: absolute;
+            top: 50%;
+            translate: 0 -50%;
+            &:hover{
+                color: darksalmon;
+                box-shadow: 0px 0px 5px darksalmon;
+                cursor: pointer;
+            }
+        }
+        .right {
+            left: 100%;
+        }
+        .left {
+            right: 100%;
+        }
+    }
+}

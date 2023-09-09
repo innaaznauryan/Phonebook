@@ -1,0 +1,95 @@
+
+.btn {
+    background-color: cadetblue;
+    color: #282c34;
+    width: fit-content;
+    padding: 10px;
+    margin: 10px;
+    border: 0;
+    border-radius: 5px;
+    position: relative;
+    z-index: 1;
+    transition: background-color .5s;
+    &:hover{
+        cursor: pointer;
+    }
+    &::after{
+        content: "";
+        width: 0;
+        height: 100%;
+        transition: .5s ease-in;
+        background-color: darksalmon;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        border-radius: 5px 50px 50px 5px;
+    }
+    &:hover::after {
+        width: 100%;
+        border-radius: 5px;
+    }
+  }
+.header {
+    display: block;
+}
+.person {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    place-items: center;
+    gap: 20px;
+    color: cadetblue;
+    border: 1px solid cadetblue;
+    border-radius: 5px;
+    margin: 20px;
+
+    .heading {
+        font-weight: 600;
+        transition: .5s;
+        &:hover {
+            color: darksalmon;
+        }
+    }
+    .layout {
+        margin: 20px;
+        text-align: center;
+        span {
+            transition: .5s;
+            &:hover {
+                color: darksalmon;
+            }
+        }
+    }
+    .controls {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        svg {
+            transition: .5s;
+            &:hover {
+                cursor: pointer;
+                color: darksalmon;
+            }
+        }
+    }
+}
+.error {
+    color: red;
+    height: 20px;
+    text-align: center;
+}
+
+
+
+@media screen and (max-width: 600px) {
+    .person{
+        display: block;
+        text-align: center;
+    }
+}
+@media screen and (max-width: 768px) {
+    .person.header {
+        display: none;
+    }
+}

@@ -1,0 +1,25 @@
+.searchDiv {
+    text-align: right;
+    margin-right: 10px;
+    
+    form {
+        width: fit-content;
+        display: inline-block;
+    }
+}
+
+#search {
+    width: 20vw;
+}
+
+
+@media screen and (max-width: 992px) {
+    #search {
+        width: 30vw;
+    }
+}
+@media screen and (max-width: 768px) {
+    #search {
+        width: 50vw;
+    }
+}
