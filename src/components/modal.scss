@@ -11,8 +11,9 @@
     flex-direction: column;
     justify-content:space-around;
     align-items: center;
-    h2 {
+    h2, h3 {
         color: #282c34;
+        text-align: center;
     }
     form {
         text-align: center;
@@ -20,7 +21,6 @@
     input{
         width: min(80%, 400px);
         padding: 10px;
-        animation-fill-mode: forwards;
         transition: .5s;
         translate: 0 30px;
         visibility: hidden;
@@ -31,7 +31,18 @@
         visibility: visible;
         opacity: 1;
     }
-    .edit {
+    p {
+        color: #282c34;
+        font-weight: 600;
+        padding: 10px;
+        text-shadow: 2px 2px 7px darksalmon;
+        font-size: 18px;
+        translate: 0 30px;
+        visibility: hidden;
+        opacity: 0;
+        transition: .5s;
+    }
+    .btnModal {
         margin-inline: 10px;
         padding: 10px;
         background-color: #282c34;

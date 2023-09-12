@@ -6,22 +6,27 @@ import Pagination from './Pagination'
 import "./list.scss"
 import {AiFillDelete, AiFillEdit} from "react-icons/ai"
 import {
-    db, 
+    db,
     collection,
     doc,
+    getDocs,
     onSnapshot,
     addDoc,
     deleteDoc,
     updateDoc,
     query,
+    where,
     orderBy
 } from "../firebase"
+import Modal from './Modal'
+import Delete from './Delete'
 
 const List = () => {
    
     const range = 5
     const [data, setData] = useState([])
     const [editMode, setEditMode] = useState({mode: false, id: null})
+    const [deleteMode, setDeleteMode] = useState({mode: false, id: null})
     const [error, setError] = useState({add: null, edit: null})
     const [searchQuery, setSearchQuery] = useState("")
     const [arrows, setArrows] = useState({})
@@ -64,24 +69,39 @@ const List = () => {
 
     const validate = (phone, date, type) => {
         const isValidPhone = /^\+\d{11}$/.test(phone)
-        const isValidDate = /^\d{4}-\d{2}-\d{2}$/.test(date)
+        const isValidDate = /^(0[1-9]|[12]\d|3[01])-(0[1-9]|1[0-2])-(19\d{2}|20[01]\d|202[0-2])$/.test(date)
         if (!isValidPhone || !isValidDate) {
-            setError({...error, [type]: isValidPhone ? "Wrong date format!" : "Wrong phone format!"})
+            setError({...error, [type]: isValidPhone ? "Please use this date format: 'DD-MM-YYYY'" : "Please use this phone format: '+37400000000'"})
             setTimeout(() => setError({...error, [type]: null}), 2000);
             return false
         }
         return true
     }
 
+    const format = (string) => {
+        return string[0].toUpperCase() + string.slice(1).toLowerCase()
+    }
+    
     const addPerson = (e) => {
         e.preventDefault()
-        const {phone, bday} = e.target
-        if (validate(phone.value, bday.value, "add")) {
-            const newPerson = {...Object.fromEntries([...new FormData(e.target)])}
+        const {fname, lname, phone, bday} = {...Object.fromEntries([...new FormData(e.target)])}
+        if (validate(phone, bday, "add")) {
             const collectionRef = collection(db, "phonebook")
-            addDoc(collectionRef, newPerson)
-            .then(() => e.target.reset())
+            const queryData = query(collectionRef,
+            where("fname", "==", format(fname)),
+            where("lname", "==", format(lname)),
+            where("phone", "==", phone))
+            getDocs(queryData)
+            .then(querySnapshot => {
+                if(querySnapshot.docs.length == 0) return addDoc(collectionRef, {fname: format(fname), lname: format(lname), phone, bday})
+                else {
+                    setError({...error, add: "This contact already exists!"})
+                    setTimeout(() => setError({...error, add: null}), 2000);
+                }
+            })
+            .then(() => {})
             .catch(error => console.log(error))
+            .finally(() => e.target.reset())
         }
     }
 
@@ -89,13 +109,16 @@ const List = () => {
         setEditMode({mode: true, id})
     }
 
+    const openDeleteModal = (id) => {
+        setDeleteMode({mode: true, id})
+    }
+
     const editPerson = (e, id) => {
         e.preventDefault()
-        const {phone, bday} = e.target
-        if (validate(phone.value, bday.value, "edit")) {
-            const renewed = {...Object.fromEntries([...new FormData(e.target)])}
+        const {fname, lname, phone, bday} = {...Object.fromEntries([...new FormData(e.target)])}
+        if (validate(phone, bday, "edit")) {
             const documentRef = doc(db, "phonebook", id)
-            updateDoc(documentRef, renewed)
+            updateDoc(documentRef, {fname: format(fname), lname: format(lname), phone, bday})
             .then(() => {
                 e.target.reset()
                 setEditMode({mode: false, id: null})
@@ -107,7 +130,7 @@ const List = () => {
     const deletePerson = (id) => {
         const documentRef = doc(db, "phonebook", id)
         deleteDoc(documentRef)
-        .then(() => console.log(id))
+        .then(() => setDeleteMode({mode: false, id: null}))
         .catch(error => console.log(error))
     }
 
@@ -127,13 +150,13 @@ const List = () => {
 
     {data.map(({id, fname, lname, phone, bday}) => {
         return <div key={id} className='person'>
-            <div className='layout'><span>{fname[0].toUpperCase() + fname.slice(1).toLowerCase()}</span></div>
-            <div className='layout'><span>{lname[0].toUpperCase() + lname.slice(1).toLowerCase()}</span></div>
+            <div className='layout'><span>{fname}</span></div>
+            <div className='layout'><span>{lname}</span></div>
             <div className='layout'><span>{phone}</span></div>
             <div className='layout'><span>{bday}</span></div>
             <div className='controls layout'>
                 <AiFillEdit className='edit' onClick={() => openEditModal(id)}/>
-                <AiFillDelete className='delete' onClick={() => deletePerson(id)}/>
+                <AiFillDelete className='delete' onClick={() => openDeleteModal(id)}/>
             </div>
         </div>
     })}
@@ -142,7 +165,13 @@ const List = () => {
 
     <div className="error">{error.add && <p>{error.add}</p>}</div>
 
-    {editMode.mode && <Edit data={data} id={editMode.id} exit={setEditMode} editPerson={editPerson} error={error} />}
+    {editMode.mode && <Modal data={data} id={editMode.id} exit={setEditMode} func={editPerson} error={error}>
+        <Edit />
+    </Modal>}
+
+    {deleteMode.mode && <Modal data={data} id={deleteMode.id} exit={setDeleteMode} func={deletePerson}>
+        <Delete />
+    </Modal>}
   </>
   )
 }
