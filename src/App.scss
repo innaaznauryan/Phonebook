@@ -25,6 +25,17 @@ input {
   text-align: center;
   width: 15vw;
 }
+footer{
+  padding: 30px;
+  text-align: center;
+  color: cadetblue;
+  .bold{
+    font-weight: 600;
+  }
+  .small{
+    font-size: 12px;
+  }
+}
 
 
 
