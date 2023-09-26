@@ -8,8 +8,8 @@ import "./mainLayout.scss"
 
 const MainLayout = () => {
 
-    const [user, setUser] = useState()
     const [signedin, setSignedin] = useState()
+    const [documentPath, setDocumentPath] = useState("phonebook")
     const location = useLocation()
 
     const handleClick = () => {
@@ -20,22 +20,25 @@ const MainLayout = () => {
 
     useEffect(() => {
       onAuthStateChanged(auth, (user) => {
-        console.log("user status changed:", user?.uid)
-        setUser(user?.uid || null)
+        if(user) setDocumentPath("users/" + user.uid + "/phonebook")
+        else {
+      setDocumentPath("phonebook")
+        }
       })
     }, [])
 
   return (
     <div className="authLayout">
         <div className="navbtns">
+            <h3>Save your phone contacts with us!</h3>
             <button className="btn auth"><Link to="/signup">Sign Up</Link></button>
             {!signedin && <button className="btn auth"><Link to="/login">Sign In</Link></button>}
-            {signedin && <button className="btn auth" onClick={handleClick}>Sign out</button>}
+            {signedin && <button className="btn auth exit" onClick={handleClick}>Sign out</button>}
             {location.pathname != "/" && <button className="btn auth"><Link to="/">Home</Link></button>}
         </div>
 
         <Routes>
-            <Route index element={<List user={user} />}></Route>
+            <Route index element={<List documentPath={documentPath} />}></Route>
             <Route path='/login' element={<Login setSignedin={setSignedin} />}></Route>
             <Route path='/signup' element={<Signup setSignedin={setSignedin} />}></Route>
         </Routes>

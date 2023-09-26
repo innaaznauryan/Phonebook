@@ -21,7 +21,7 @@ import {
 import Modal from './Modal'
 import Delete from './Delete'
 
-const List = ({user}) => {
+const List = ({documentPath}) => {
    
     const range = 5
     const [data, setData] = useState([])
@@ -32,10 +32,9 @@ const List = ({user}) => {
     const [arrows, setArrows] = useState({})
     const [pageNumber, setPageNumber] = useState(0)
 
-    console.log(user)
 
     useEffect(() => {
-        const collectionRef = collection(db, "phonebook")
+        const collectionRef = collection(db, documentPath)
         const orderedCol = query(collectionRef, orderBy("fname", "asc"), orderBy("lname", "asc"))
         try {
             const unsubscribe = onSnapshot(orderedCol, snapshot => {
@@ -53,6 +52,7 @@ const List = ({user}) => {
                 } else {
                     const docs = snapshot.docs.slice(pageNumber * range, pageNumber * range + range)
                     docs.forEach(doc => {
+                        console.log(doc.data())
                         phonebook.push({...doc.data(), id: doc.id})
                     })
                     setArrows({
@@ -67,7 +67,7 @@ const List = ({user}) => {
         catch (error) {
             console.log(error)
         }
-    }, [pageNumber, searchQuery])
+    }, [pageNumber, searchQuery, documentPath])
 
     const validate = (phone, date, type) => {
         const isValidPhone = /^\+\d{11}$/.test(phone)
@@ -88,7 +88,7 @@ const List = ({user}) => {
         e.preventDefault()
         const {fname, lname, phone, bday} = {...Object.fromEntries([...new FormData(e.target)])}
         if (validate(phone, bday, "add")) {
-            const collectionRef = collection(db, "phonebook")
+            const collectionRef = collection(db, documentPath)
             const queryData = query(collectionRef,
             where("fname", "==", format(fname)),
             where("lname", "==", format(lname)),
@@ -119,7 +119,7 @@ const List = ({user}) => {
         e.preventDefault()
         const {fname, lname, phone, bday} = {...Object.fromEntries([...new FormData(e.target)])}
         if (validate(phone, bday, "edit")) {
-            const documentRef = doc(db, "phonebook", id)
+            const documentRef = doc(db, documentPath, id)
             updateDoc(documentRef, {fname: format(fname), lname: format(lname), phone, bday})
             .then(() => {
                 e.target.reset()
@@ -130,7 +130,7 @@ const List = ({user}) => {
     }
 
     const deletePerson = (id) => {
-        const documentRef = doc(db, "phonebook", id)
+        const documentRef = doc(db, documentPath, id)
         deleteDoc(documentRef)
         .then(() => setDeleteMode({mode: false, id: null}))
         .catch(error => console.log(error))

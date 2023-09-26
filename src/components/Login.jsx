@@ -1,7 +1,8 @@
+import {useNavigate} from "react-router-dom"
 import {auth, signInWithEmailAndPassword} from "../firebase"
-import "./auth.scss"
 
 const Login = ({setSignedin}) => {
+    const navigate = useNavigate()
     const handleSubmit = (e) => {
         e.preventDefault()
         const email = e.target.email.value
@@ -9,13 +10,14 @@ const Login = ({setSignedin}) => {
         signInWithEmailAndPassword(auth, email, password)
         .then(cred => {
             setSignedin(true)
+            navigate("/")
         })
         .catch(error => console.log(error))
         .finally(() => e.target.reset())
     }
   return (
     <>
-    <h2>Have an account? Sign in!</h2>
+    <h4>Have an account? Sign in!</h4>
     <form action="" className='login' onSubmit={handleSubmit}>
         <label htmlFor="email">email:</label>
         <input type="email" name='email' id="email"/>

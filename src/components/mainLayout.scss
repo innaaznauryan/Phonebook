@@ -7,17 +7,40 @@
 }
 .btn.auth{
     padding: 0;
+    a{
+        text-decoration: none;
+        color: #282c34;
+        display: inline-block;
+        padding: 10px;
+    }
+    &::after{
+        content: none;
+    }
 }
-.btn.auth a{
-    text-decoration: none;
-    color: #282c34;
-    display: inline-block;
+.btn.exit{
     padding: 10px;
 }
-.btn.auth::after{
-    content: none;
-}
-h2{
+
+h2, h3, h4{
     color: cadetblue;
     padding: 10px;
+}
+.login, .signup{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+.login input, .signup input{
+    width: 20vw;
+} 
+label{
+    color: cadetblue;
+}
+
+
+@media (max-width: 768px) {
+    .login input, .signup input{
+        width: 50vw;
+    }
 }

@@ -70,15 +70,16 @@ footer{
 
 
 
-@media screen and (max-width: 768px) {
-  input {
-    width: 50%;
-  }
+@media (max-width: 768px) {
   .person {
     text-align: center;
     display: block;
+    input{
+      width: 50%;
+    }
   }
   header {
     background-attachment: fixed;
   }
 }
+
