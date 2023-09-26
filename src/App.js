@@ -1,6 +1,6 @@
-import React from 'react'
-import List from './components/List'
+import MainLayout from './components/MainLayout'
 import "./App.scss"
+
 
 const App = () => {
   return (
@@ -8,7 +8,9 @@ const App = () => {
       <header>
         <h1>Phonebook</h1>
       </header>
-      <List />
+
+      <MainLayout />
+      
       <footer>
         <p className='bold'>&copy; Inna Aznauryan 2023</p>
         <p className='small'>No rights reserved</p>

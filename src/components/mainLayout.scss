@@ -1,0 +1,23 @@
+.authLayout{
+    margin: 20px;
+    text-align: center;
+}
+.navbtns{
+    padding: 20px;
+}
+.btn.auth{
+    padding: 0;
+}
+.btn.auth a{
+    text-decoration: none;
+    color: #282c34;
+    display: inline-block;
+    padding: 10px;
+}
+.btn.auth::after{
+    content: none;
+}
+h2{
+    color: cadetblue;
+    padding: 10px;
+}

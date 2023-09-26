@@ -12,6 +12,13 @@ import {
     where,
     orderBy,
 } from "firebase/firestore"
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signOut,
+  signInWithEmailAndPassword,
+  onAuthStateChanged
+} from "firebase/auth"
 
 const firebaseConfig = {
     apiKey: "AIzaSyBPk0fSgUJai0iSOZCXC9ImW3KX7TZlNz8",
@@ -27,9 +34,10 @@ initializeApp(firebaseConfig)
 
 // init services
 const db = getFirestore()
+const auth = getAuth()
 
 // export the Firestore instance
-export {db}
+export {db, auth}
 
 // export Firebase Firestore functions
 export {
@@ -43,4 +51,8 @@ export {
   query,
   where,
   orderBy,
+  createUserWithEmailAndPassword,
+  signOut,
+  signInWithEmailAndPassword,
+  onAuthStateChanged
 }

@@ -21,7 +21,7 @@ import {
 import Modal from './Modal'
 import Delete from './Delete'
 
-const List = () => {
+const List = ({user}) => {
    
     const range = 5
     const [data, setData] = useState([])
@@ -31,6 +31,8 @@ const List = () => {
     const [searchQuery, setSearchQuery] = useState("")
     const [arrows, setArrows] = useState({})
     const [pageNumber, setPageNumber] = useState(0)
+
+    console.log(user)
 
     useEffect(() => {
         const collectionRef = collection(db, "phonebook")
