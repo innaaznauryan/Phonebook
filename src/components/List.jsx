@@ -21,7 +21,7 @@ import {
 import Modal from './Modal'
 import Delete from './Delete'
 
-const List = ({documentPath}) => {
+const List = ({documentPath, signedin}) => {
    
     const range = 5
     const [data, setData] = useState([])
@@ -31,7 +31,6 @@ const List = ({documentPath}) => {
     const [searchQuery, setSearchQuery] = useState("")
     const [arrows, setArrows] = useState({})
     const [pageNumber, setPageNumber] = useState(0)
-
 
     useEffect(() => {
         const collectionRef = collection(db, documentPath)
@@ -52,7 +51,6 @@ const List = ({documentPath}) => {
                 } else {
                     const docs = snapshot.docs.slice(pageNumber * range, pageNumber * range + range)
                     docs.forEach(doc => {
-                        console.log(doc.data())
                         phonebook.push({...doc.data(), id: doc.id})
                     })
                     setArrows({
@@ -138,7 +136,9 @@ const List = ({documentPath}) => {
 
   return (
   <>
-    <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} setPageNumber={setPageNumber} />
+    {!signedin && <h4>Sign up to store your contacts</h4>}
+
+    {signedin && <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} setPageNumber={setPageNumber} />}
 
     <Pagination pageNumber={pageNumber} setPageNumber={setPageNumber} arrows={arrows} />
 
@@ -147,7 +147,7 @@ const List = ({documentPath}) => {
         <div className='layout heading'>Last Name</div>
         <div className='layout heading'>Phone Number</div>
         <div className='layout heading'>Date of Birth</div>
-        <div className='layout heading'>Actions</div>
+        {signedin && <div className='layout heading'>Actions</div>}
     </div>
 
     {data.map(({id, fname, lname, phone, bday}) => {
@@ -156,14 +156,14 @@ const List = ({documentPath}) => {
             <div className='layout'><span>{lname}</span></div>
             <div className='layout'><span>{phone}</span></div>
             <div className='layout'><span>{bday}</span></div>
-            <div className='controls layout'>
+            {signedin && <div className='controls layout'>
                 <AiFillEdit className='edit' onClick={() => openEditModal(id)}/>
                 <AiFillDelete className='delete' onClick={() => openDeleteModal(id)}/>
-            </div>
+            </div>}
         </div>
     })}
 
-    <Form addPerson={addPerson} />
+    {signedin && <Form addPerson={addPerson} />}
 
     <div className="error">{error.add && <p>{error.add}</p>}</div>
 

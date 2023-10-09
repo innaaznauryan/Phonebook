@@ -37,6 +37,11 @@ h2, h3, h4{
 label{
     color: cadetblue;
 }
+.error {
+    color: red;
+    height: 20px;
+    text-align: center;
+}
 
 
 @media (max-width: 768px) {
